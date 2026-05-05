@@ -24,10 +24,6 @@ export default function VapiWidget() {
   }, [])
 
   const startCall = async () => {
-    if (VAPI_PUBLIC_KEY === 'YOUR_VAPI_PUBLIC_KEY') {
-      alert('Add your VAPI credentials to VapiWidget.tsx to enable the voice demo.')
-      return
-    }
 
     setStatus('connecting')
     try {
