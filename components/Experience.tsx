@@ -93,7 +93,7 @@ export default function Experience() {
           >
             {jobs.map((job, i) => (
               <button key={i} onClick={() => setActive(i)} style={{
-                background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
+                border: 'none', cursor: 'pointer', textAlign: 'left',
                 padding: '16px 20px',
                 borderLeft: active === i ? '2px solid var(--accent)' : '2px solid var(--faint)',
                 background: active === i ? 'rgba(200,169,110,0.06)' : 'transparent',
