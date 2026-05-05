@@ -2,8 +2,9 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { Variants } from 'framer-motion'
 
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
   show: (i: number) => ({
     opacity: 1, y: 0,
