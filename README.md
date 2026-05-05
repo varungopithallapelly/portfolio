@@ -38,4 +38,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 =======
 # portfolio
 My personal portfolio website
->>>>>>> 2b44bb4e47dc850be5e48059cfb1d6e8a52bf07d
+varunthallapelly.com
