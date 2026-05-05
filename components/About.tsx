@@ -1,11 +1,19 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { Variants } from 'framer-motion'
+import { motion, Variants } from 'framer-motion'
+
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] } }
 }
+
+const socialLinks = [
+  { label: 'GitHub', href: 'https://github.com/varungopithallapelly', color: '#E8E6E0', bg: 'rgba(232,230,224,0.1)', border: 'rgba(232,230,224,0.2)' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/varun-gopi-thallapelly/', color: '#0A66C2', bg: 'rgba(10,102,194,0.15)', border: 'rgba(10,102,194,0.4)' },
+  { label: 'Instagram', href: 'https://www.instagram.com/__varun._/', color: '#E1306C', bg: 'rgba(225,48,108,0.12)', border: 'rgba(225,48,108,0.35)' },
+  { label: 'Email', href: 'mailto:thallapellyvarun@gmail.com', color: '#C8A96E', bg: 'rgba(200,169,110,0.12)', border: 'rgba(200,169,110,0.35)' },
+  { label: '+44 7471 301 412', href: 'tel:+447471301412', color: '#4ADE80', bg: 'rgba(74,222,128,0.1)', border: 'rgba(74,222,128,0.3)' },
+]
 
 export default function About() {
   return (
@@ -33,7 +41,7 @@ export default function About() {
             </p>
             <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.9 }}>
               At SD Care, I&apos;ve built everything from a fully custom payroll system that reduced a week-long process to a single
-              day, to an agentic AI voice system serving 3 optical franchise clients simultaneously handling 72 languages,
+              day, to an agentic AI voice system serving 3 optical franchise clients simultaneously — handling 72 languages,
               real-time tone analysis, and 24/7 inbound call management.
             </p>
             <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.9 }}>
@@ -42,18 +50,36 @@ export default function About() {
               difference to how a business operates.
             </p>
 
-            <div style={{ display: 'flex', gap: '16px', marginTop: '8px', flexWrap: 'wrap' }}>
-              {[
-                { label: 'GitHub', href: 'https://github.com/varungopithallapelly' },
-                { label: 'LinkedIn', href: 'https://www.linkedin.com/in/varun-gopi-thallapelly/' },
-                { label: 'Email', href: 'mailto:thallapellyvarun@gmail.com' },
-              ].map(link => (
-                <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" style={{
-                  fontFamily: 'monospace', fontSize: '12px', color: 'var(--accent)',
-                  letterSpacing: '0.06em', textDecoration: 'none',
-                  borderBottom: '1px solid rgba(200,169,110,0.3)',
-                  paddingBottom: '2px', transition: 'color 0.2s',
-                }}>
+            {/* Eye-catching link buttons */}
+            <div style={{ display: 'flex', gap: '10px', marginTop: '8px', flexWrap: 'wrap' }}>
+              {socialLinks.map(link => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontFamily: 'monospace', fontSize: '11px',
+                    color: link.color,
+                    background: link.bg,
+                    border: `1px solid ${link.border}`,
+                    padding: '7px 14px', borderRadius: '8px',
+                    textDecoration: 'none', letterSpacing: '0.04em',
+                    transition: 'all 0.2s',
+                    display: 'inline-flex', alignItems: 'center', gap: '5px',
+                    fontWeight: 500,
+                  }}
+                  onMouseEnter={e => {
+                    const el = e.currentTarget as HTMLElement
+                    el.style.transform = 'translateY(-2px)'
+                    el.style.boxShadow = `0 4px 16px ${link.border}`
+                  }}
+                  onMouseLeave={e => {
+                    const el = e.currentTarget as HTMLElement
+                    el.style.transform = 'translateY(0)'
+                    el.style.boxShadow = 'none'
+                  }}
+                >
                   {link.label} ↗
                 </a>
               ))}
@@ -61,28 +87,31 @@ export default function About() {
           </motion.div>
 
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={fadeUp}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {[
-                { category: 'Data & Analytics', items: ['Python', 'R Studio', 'Power BI', 'PostgreSQL', 'MS Excel', 'SPSS'] },
-                { category: 'AI & Automation', items: ['Agentic AI', 'NLP', 'Sentiment Analysis', 'Voice Agents', 'Workflow Automation'] },
-                { category: 'Development', items: ['React JS', 'Next.js', 'MongoDB', 'Python Backend', 'API Integration'] },
-                { category: 'Web & Marketing', items: ['SEO', 'Core Web Vitals', 'Google Ads', 'Meta Ads', 'Smart Search'] },
-                { category: 'Business', items: ['KPI Design', 'Financial Modelling', 'ISO 9001', 'CQC Audit', 'SharePoint'] },
+                { category: 'Data & Analytics', color: '#C8A96E', items: ['Python', 'R Studio', 'Power BI', 'PostgreSQL', 'MS Excel', 'SPSS'] },
+                { category: 'AI & Automation', color: '#4ADE80', items: ['Agentic AI', 'NLP', 'Sentiment Analysis', 'Voice Agents', 'Workflow Automation'] },
+                { category: 'Development', color: '#7C9EFF', items: ['React JS', 'Next.js', 'MongoDB', 'Python Backend', 'API Integration'] },
+                { category: 'Web & Marketing', color: '#EC4899', items: ['SEO', 'Core Web Vitals', 'Google Ads', 'Meta Ads', 'Smart Search'] },
+                { category: 'Business', color: '#F97316', items: ['KPI Design', 'Financial Modelling', 'ISO 9001', 'CQC Audit', 'SharePoint'] },
               ].map(group => (
                 <div key={group.category} style={{
                   background: 'var(--surface)', border: '1px solid var(--faint)',
-                  borderRadius: '10px', padding: '16px 20px',
+                  borderRadius: '10px', padding: '14px 18px',
+                  borderLeft: `3px solid ${group.color}`,
                 }}>
                   <p style={{
-                    fontFamily: 'monospace', fontSize: '10px', color: 'var(--accent)',
-                    letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '10px',
+                    fontFamily: 'monospace', fontSize: '10px', color: group.color,
+                    letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '10px', fontWeight: 600,
                   }}>{group.category}</p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                     {group.items.map(item => (
                       <span key={item} style={{
-                        fontFamily: 'monospace', fontSize: '11px', color: 'var(--muted)',
-                        background: 'var(--surface2)', padding: '3px 10px',
-                        borderRadius: '100px', border: '1px solid var(--faint)',
+                        fontFamily: 'monospace', fontSize: '11px', color: 'var(--text)',
+                        background: `${group.color}15`,
+                        border: `1px solid ${group.color}30`,
+                        padding: '3px 10px', borderRadius: '100px',
+                        fontWeight: 500,
                       }}>{item}</span>
                     ))}
                   </div>
