@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 // REPLACE THESE WITH YOUR VAPI CREDENTIALS
 const VAPI_PUBLIC_KEY = 'ae05102d-6db4-429e-be3a-7373ff67117d'
-const VAPI_ASSISTANT_ID = '6faf3c38-2630-47c3-9258-8e2031f3e85b'
+const VAPI_ASSISTANT_ID = '20179215-b12a-428f-8032-3a3798aab51a'
 
 type CallStatus = 'idle' | 'connecting' | 'active' | 'ended'
 
