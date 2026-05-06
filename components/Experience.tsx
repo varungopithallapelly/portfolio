@@ -73,7 +73,7 @@ const education = [
     modules: ['Predictive Modelling', 'Business Intelligence', 'Statistical Analysis', 'Data Visualisation', 'Operations Research'],
   },
   {
-    degree: 'BEng Electrical Engineering',
+    degree: 'BSc Electrical Engineering',
     school: 'Kakatiya Institute of Technology & Science',
     location: 'Warangal, India',
     period: 'Jun 2016 – Jun 2020',
