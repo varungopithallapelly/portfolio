@@ -63,69 +63,22 @@ const jobs = [
   },
 ]
 
-<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
-  {education.map((edu, i) => (
-    <motion.div
-      key={i}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: i * 0.1 }}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      style={{
-        background: 'var(--bg)', border: '1px solid var(--faint)',
-        borderRadius: '12px', padding: '28px',
-        borderTop: '3px solid var(--accent)',
-        transition: 'box-shadow 0.2s, border-color 0.2s',
-      }}
-      onMouseEnter={e => {
-        const el = e.currentTarget as HTMLElement
-        el.style.boxShadow = '0 12px 40px rgba(200,169,110,0.12)'
-        el.style.borderColor = 'rgba(200,169,110,0.4)'
-      }}
-      onMouseLeave={e => {
-        const el = e.currentTarget as HTMLElement
-        el.style.boxShadow = 'none'
-        el.style.borderColor = 'var(--faint)'
-      }}
-    >
-      <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px', lineHeight: 1.2 }}>
-        {edu.degree}
-      </h3>
-      <p style={{ fontSize: '15px', color: 'var(--accent)', fontWeight: 500, marginBottom: '16px' }}>
-        {edu.school}
-      </p>
-
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
-        <span style={{
-          fontFamily: 'monospace', fontSize: '11px', color: 'var(--muted)',
-          background: 'var(--surface)', padding: '4px 12px', borderRadius: '6px',
-          border: '1px solid var(--faint)', letterSpacing: '0.04em',
-        }}>{edu.period}</span>
-        <span style={{
-          fontFamily: 'monospace', fontSize: '11px', color: 'var(--muted)',
-          background: 'var(--surface)', padding: '4px 12px', borderRadius: '6px',
-          border: '1px solid var(--faint)', letterSpacing: '0.04em',
-        }}>{edu.location}</span>
-        <span style={{
-          fontFamily: 'monospace', fontSize: '11px', color: 'var(--green)',
-          background: 'rgba(74,222,128,0.1)', padding: '4px 12px', borderRadius: '6px',
-          border: '1px solid rgba(74,222,128,0.25)', letterSpacing: '0.04em',
-        }}>✓ {edu.grade}</span>
-      </div>
-
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-        {edu.modules.map(m => (
-          <span key={m} style={{
-            fontFamily: 'monospace', fontSize: '10px', color: 'var(--muted)',
-            background: 'var(--surface)', padding: '3px 10px',
-            borderRadius: '4px', border: '1px solid var(--faint)',
-          }}>{m}</span>
-        ))}
-      </div>
-    </motion.div>
-  ))}
-</div>
+const education = [
+  {
+    degree: 'MSc Business Analytics',
+    school: 'University of Surrey',
+    location: 'Guildford, United Kingdom',
+    period: 'Sep 2021 – Sep 2022',
+    grade: 'Merit',
+  },
+  {
+    degree: 'BEng Electrical Engineering',
+    school: 'Kakatiya Institute of Technology & Science',
+    location: 'Warangal, India',
+    period: 'Jun 2016 – Jun 2020',
+    grade: 'First Class',
+  },
+]
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -139,7 +92,6 @@ export default function Experience() {
     <section id="experience" style={{ padding: 'clamp(80px, 10vw, 120px) 0', background: 'var(--surface)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 32px' }}>
 
-        {/* Section header */}
         <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={fadeUp}
           style={{ marginBottom: '56px' }}
         >
@@ -154,7 +106,6 @@ export default function Experience() {
         {/* Work experience */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '40px', alignItems: 'start', marginBottom: '80px' }}>
 
-          {/* Company tabs — redesigned */}
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={fadeUp}
             style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
           >
@@ -192,7 +143,7 @@ export default function Experience() {
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '6px' }}>
                     <span style={{
-                      fontFamily: 'monospace', fontSize: '13px', fontWeight: 600, letterSpacing: '0.02em',
+                      fontFamily: 'monospace', fontSize: '13px', fontWeight: 600,
                       color: isActive ? 'var(--accent)' : 'var(--text)',
                       transition: 'color 0.2s',
                     }}>
@@ -209,9 +160,9 @@ export default function Experience() {
                     )}
                   </div>
                   <div style={{
-                    fontSize: '13px', fontWeight: 500,
+                    fontSize: '13px', fontWeight: 500, marginBottom: '4px',
                     color: isActive ? 'var(--text)' : 'var(--muted)',
-                    marginBottom: '4px', transition: 'color 0.2s',
+                    transition: 'color 0.2s',
                   }}>
                     {job.title}
                   </div>
@@ -223,23 +174,17 @@ export default function Experience() {
                     {job.period}
                   </div>
                   {isActive && (
-                    <motion.div
-                      layoutId="activeIndicator"
-                      style={{
-                        position: 'absolute', right: '16px', top: '50%',
-                        transform: 'translateY(-50%)',
-                        fontSize: '12px', color: 'var(--accent)',
-                      }}
-                    >
-                      →
-                    </motion.div>
+                    <span style={{
+                      position: 'absolute', right: '16px', top: '50%',
+                      transform: 'translateY(-50%)',
+                      fontSize: '14px', color: 'var(--accent)',
+                    }}>→</span>
                   )}
                 </button>
               )
             })}
           </motion.div>
 
-          {/* Job detail */}
           <motion.div
             key={active}
             initial={{ opacity: 0, x: 16 }}
@@ -258,29 +203,22 @@ export default function Experience() {
                 @ {jobs[active].fullCompany}
               </span>
             </div>
-            <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '24px', flexWrap: 'wrap' }}>
               <span style={{
                 fontFamily: 'monospace', fontSize: '11px', color: 'var(--muted)',
-                background: 'var(--surface)', padding: '4px 10px', borderRadius: '6px',
+                background: 'var(--surface)', padding: '4px 12px', borderRadius: '6px',
                 border: '1px solid var(--faint)', letterSpacing: '0.04em',
-              }}>
-                 {jobs[active].period}
-              </span>
+              }}>{jobs[active].period}</span>
               <span style={{
                 fontFamily: 'monospace', fontSize: '11px', color: 'var(--muted)',
-                background: 'var(--surface)', padding: '4px 10px', borderRadius: '6px',
+                background: 'var(--surface)', padding: '4px 12px', borderRadius: '6px',
                 border: '1px solid var(--faint)', letterSpacing: '0.04em',
-              }}>
-                 {jobs[active].location}
-              </span>
+              }}>{jobs[active].location}</span>
             </div>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px', listStyle: 'none', marginBottom: '24px' }}>
               {jobs[active].bullets.map((b, i) => (
                 <li key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                  <span style={{
-                    color: 'var(--accent)', flexShrink: 0, fontSize: '10px',
-                    marginTop: '5px', fontWeight: 700,
-                  }}>▸</span>
+                  <span style={{ color: 'var(--accent)', flexShrink: 0, fontSize: '10px', marginTop: '5px', fontWeight: 700 }}>▸</span>
                   <span style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8 }}>{b}</span>
                 </li>
               ))}
@@ -290,8 +228,7 @@ export default function Experience() {
                 <span key={t} style={{
                   fontFamily: 'monospace', fontSize: '11px', color: 'var(--accent)',
                   background: 'rgba(200,169,110,0.1)', padding: '4px 12px',
-                  borderRadius: '100px', border: '1px solid rgba(200,169,110,0.25)',
-                  fontWeight: 500,
+                  borderRadius: '100px', border: '1px solid rgba(200,169,110,0.25)', fontWeight: 500,
                 }}>{t}</span>
               ))}
             </div>
@@ -299,9 +236,7 @@ export default function Experience() {
         </div>
 
         {/* Education */}
-        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={fadeUp}
-          style={{ marginBottom: '40px' }}
-        >
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={fadeUp}>
           <p style={{ fontFamily: 'monospace', fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.1em', marginBottom: '12px' }}>
             02b. education
           </p>
@@ -320,66 +255,49 @@ export default function Experience() {
                 whileHover={{ y: -4, transition: { duration: 0.2 } }}
                 style={{
                   background: 'var(--bg)', border: '1px solid var(--faint)',
-                  borderRadius: '12px', padding: '24px',
+                  borderRadius: '12px', padding: '28px',
                   borderTop: '3px solid var(--accent)',
-                  transition: 'box-shadow 0.2s',
+                  transition: 'box-shadow 0.2s, border-color 0.2s',
                 }}
                 onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(200,169,110,0.12)'
-                  ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(200,169,110,0.4)'
+                  const el = e.currentTarget as HTMLElement
+                  el.style.boxShadow = '0 12px 40px rgba(200,169,110,0.12)'
+                  el.style.borderColor = 'rgba(200,169,110,0.4)'
                 }}
                 onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = 'none'
-                  ;(e.currentTarget as HTMLElement).style.borderColor = 'var(--faint)'
+                  const el = e.currentTarget as HTMLElement
+                  el.style.boxShadow = 'none'
+                  el.style.borderColor = 'var(--faint)'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', marginBottom: '16px' }}>
-                  <div style={{
-                    width: '44px', height: '44px', borderRadius: '10px', flexShrink: 0,
-                    background: 'rgba(200,169,110,0.1)', border: '1px solid rgba(200,169,110,0.2)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px',
-                  }}>
-                  
-                  </div>
-                  <div>
-                    <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px', lineHeight: 1.2 }}>
-                    
-                    </h3>
-                    <p style={{ fontSize: '14px', color: 'var(--accent)', fontWeight: 500 }}>
-                    
-                    </p>
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px', lineHeight: 1.2 }}>
+                  {edu.degree}
+                </h3>
+                <p style={{ fontSize: '15px', color: 'var(--accent)', fontWeight: 500, marginBottom: '16px' }}>
+                  {edu.school}
+                </p>
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
                   <span style={{
                     fontFamily: 'monospace', fontSize: '11px', color: 'var(--muted)',
-                    background: 'var(--surface)', padding: '4px 10px', borderRadius: '6px',
+                    background: 'var(--surface)', padding: '4px 12px', borderRadius: '6px',
                     border: '1px solid var(--faint)', letterSpacing: '0.04em',
-                  }}>
-                     {edu.period}
-                  </span>
+                  }}>{edu.period}</span>
                   <span style={{
                     fontFamily: 'monospace', fontSize: '11px', color: 'var(--muted)',
-                    background: 'var(--surface)', padding: '4px 10px', borderRadius: '6px',
+                    background: 'var(--surface)', padding: '4px 12px', borderRadius: '6px',
                     border: '1px solid var(--faint)', letterSpacing: '0.04em',
-                  }}>
-                     {edu.location}
-                  </span>
+                  }}>{edu.location}</span>
                   <span style={{
                     fontFamily: 'monospace', fontSize: '11px', color: 'var(--green)',
-                    background: 'rgba(74,222,128,0.1)', padding: '4px 10px', borderRadius: '6px',
+                    background: 'rgba(74,222,128,0.1)', padding: '4px 12px', borderRadius: '6px',
                     border: '1px solid rgba(74,222,128,0.25)', letterSpacing: '0.04em',
-                  }}>
-                    ✓ {edu.grade}
-                  </span>
+                  }}>✓ {edu.grade}</span>
                 </div>
-
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                   {edu.modules.map(m => (
                     <span key={m} style={{
                       fontFamily: 'monospace', fontSize: '10px', color: 'var(--muted)',
-                      background: 'var(--surface)', padding: '3px 8px',
+                      background: 'var(--surface)', padding: '3px 10px',
                       borderRadius: '4px', border: '1px solid var(--faint)',
                     }}>{m}</span>
                   ))}
