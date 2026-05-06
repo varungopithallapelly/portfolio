@@ -63,24 +63,69 @@ const jobs = [
   },
 ]
 
-const education = [
-  {
-    degree: 'MSc Business Analytics',
-    school: 'University of Surrey',
-    location: 'Guildford, United Kingdom',
-    period: 'Sep 2021 – Sep 2022',
-    grade: 'Merit',
-    modules: ['Predictive Modelling', 'Business Intelligence', 'Statistical Analysis', 'Data Visualisation', 'Operations Research'],
-  },
-  {
-    degree: 'BSc Electrical Engineering',
-    school: 'Kakatiya Institute of Technology & Science',
-    location: 'Warangal, India',
-    period: 'Jun 2016 – Jun 2020',
-    grade: 'First Class',
-    modules: ['Circuit Analysis', 'Power Systems', 'Control Systems', 'Signal Processing'],
-  },
-]
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+  {education.map((edu, i) => (
+    <motion.div
+      key={i}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: i * 0.1 }}
+      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      style={{
+        background: 'var(--bg)', border: '1px solid var(--faint)',
+        borderRadius: '12px', padding: '28px',
+        borderTop: '3px solid var(--accent)',
+        transition: 'box-shadow 0.2s, border-color 0.2s',
+      }}
+      onMouseEnter={e => {
+        const el = e.currentTarget as HTMLElement
+        el.style.boxShadow = '0 12px 40px rgba(200,169,110,0.12)'
+        el.style.borderColor = 'rgba(200,169,110,0.4)'
+      }}
+      onMouseLeave={e => {
+        const el = e.currentTarget as HTMLElement
+        el.style.boxShadow = 'none'
+        el.style.borderColor = 'var(--faint)'
+      }}
+    >
+      <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px', lineHeight: 1.2 }}>
+        {edu.degree}
+      </h3>
+      <p style={{ fontSize: '15px', color: 'var(--accent)', fontWeight: 500, marginBottom: '16px' }}>
+        {edu.school}
+      </p>
+
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
+        <span style={{
+          fontFamily: 'monospace', fontSize: '11px', color: 'var(--muted)',
+          background: 'var(--surface)', padding: '4px 12px', borderRadius: '6px',
+          border: '1px solid var(--faint)', letterSpacing: '0.04em',
+        }}>{edu.period}</span>
+        <span style={{
+          fontFamily: 'monospace', fontSize: '11px', color: 'var(--muted)',
+          background: 'var(--surface)', padding: '4px 12px', borderRadius: '6px',
+          border: '1px solid var(--faint)', letterSpacing: '0.04em',
+        }}>{edu.location}</span>
+        <span style={{
+          fontFamily: 'monospace', fontSize: '11px', color: 'var(--green)',
+          background: 'rgba(74,222,128,0.1)', padding: '4px 12px', borderRadius: '6px',
+          border: '1px solid rgba(74,222,128,0.25)', letterSpacing: '0.04em',
+        }}>✓ {edu.grade}</span>
+      </div>
+
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+        {edu.modules.map(m => (
+          <span key={m} style={{
+            fontFamily: 'monospace', fontSize: '10px', color: 'var(--muted)',
+            background: 'var(--surface)', padding: '3px 10px',
+            borderRadius: '4px', border: '1px solid var(--faint)',
+          }}>{m}</span>
+        ))}
+      </div>
+    </motion.div>
+  ))}
+</div>
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
