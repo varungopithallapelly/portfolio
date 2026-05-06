@@ -294,14 +294,14 @@ export default function Experience() {
                     background: 'rgba(200,169,110,0.1)', border: '1px solid rgba(200,169,110,0.2)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px',
                   }}>
-                    {edu.icon}
+                  
                   </div>
                   <div>
                     <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px', lineHeight: 1.2 }}>
-                      {edu.degree}
+                    
                     </h3>
                     <p style={{ fontSize: '14px', color: 'var(--accent)', fontWeight: 500 }}>
-                      {edu.school}
+                    
                     </p>
                   </div>
                 </div>
