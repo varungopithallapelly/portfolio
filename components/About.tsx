@@ -41,11 +41,11 @@ export default function About() {
             </p>
             <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.9 }}>
               At SD Care, I&apos;ve built everything from a fully custom payroll system that reduced a week-long process to a single
-              day, to an agentic AI voice system serving 3 optical franchise clients simultaneously — handling 72 languages,
+              day, to an agentic AI voice system serving 3 optical franchise clients simultaneously handling 72 languages,
               real-time tone analysis, and 24/7 inbound call management.
             </p>
             <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.9 }}>
-              I care about <strong style={{ color: 'var(--text)', fontWeight: 500 }}>building things that actually work</strong> — not
+              I care about <strong style={{ color: 'var(--text)', fontWeight: 500 }}>building things that actually work</strong>, not
               just dashboards that look good in demos, but software that teams use every single day and that make a measurable
               difference to how a business operates.
             </p>

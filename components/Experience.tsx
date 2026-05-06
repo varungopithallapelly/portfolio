@@ -75,7 +75,7 @@ const education = [
   {
     degree: 'BEng Electrical Engineering',
     school: 'Kakatiya Institute of Technology & Science',
-    location: 'Warangal, India',
+    location: 'Telangana, India',
     period: 'Jun 2016 – Jun 2020',
     grade: 'First Class',
     modules: ['Circuit Analysis', 'Power Systems', 'Control Systems', 'Signal Processing'],
