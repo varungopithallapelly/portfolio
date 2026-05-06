@@ -70,6 +70,7 @@ const education = [
     location: 'Guildford, United Kingdom',
     period: 'Sep 2021 – Sep 2022',
     grade: 'Merit',
+    modules: ['Predictive Modelling', 'Business Intelligence', 'Statistical Analysis', 'Data Visualisation', 'Operations Research'],
   },
   {
     degree: 'BEng Electrical Engineering',
@@ -77,6 +78,7 @@ const education = [
     location: 'Warangal, India',
     period: 'Jun 2016 – Jun 2020',
     grade: 'First Class',
+    modules: ['Circuit Analysis', 'Power Systems', 'Control Systems', 'Signal Processing'],
   },
 ]
 
