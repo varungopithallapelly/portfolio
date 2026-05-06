@@ -219,14 +219,14 @@ export default function Experience() {
                 background: 'var(--surface)', padding: '4px 10px', borderRadius: '6px',
                 border: '1px solid var(--faint)', letterSpacing: '0.04em',
               }}>
-                📅 {jobs[active].period}
+                 {jobs[active].period}
               </span>
               <span style={{
                 fontFamily: 'monospace', fontSize: '11px', color: 'var(--muted)',
                 background: 'var(--surface)', padding: '4px 10px', borderRadius: '6px',
                 border: '1px solid var(--faint)', letterSpacing: '0.04em',
               }}>
-                📍 {jobs[active].location}
+                 {jobs[active].location}
               </span>
             </div>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px', listStyle: 'none', marginBottom: '24px' }}>
@@ -312,14 +312,14 @@ export default function Experience() {
                     background: 'var(--surface)', padding: '4px 10px', borderRadius: '6px',
                     border: '1px solid var(--faint)', letterSpacing: '0.04em',
                   }}>
-                    📅 {edu.period}
+                     {edu.period}
                   </span>
                   <span style={{
                     fontFamily: 'monospace', fontSize: '11px', color: 'var(--muted)',
                     background: 'var(--surface)', padding: '4px 10px', borderRadius: '6px',
                     border: '1px solid var(--faint)', letterSpacing: '0.04em',
                   }}>
-                    📍 {edu.location}
+                     {edu.location}
                   </span>
                   <span style={{
                     fontFamily: 'monospace', fontSize: '11px', color: 'var(--green)',
