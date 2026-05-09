@@ -12,13 +12,17 @@ const jobs = [
     period: 'Aug 2024 – Present',
     current: true,
     bullets: [
-      'Led data analytics initiatives designing KPIs and interactive dashboards to monitor performance and drive continuous improvement.',
-      'Analysed business processes across HR, Finance, and Operations — implementing optimisations that materially improved operational efficiency.',
-      'Worked directly with the CEO and Finance Manager to build a 5-year business plan and financial restructuring strategy.',
-      'Supported ISO 9001:2015 quality audits and CQC inspections — both entities achieved a Good CQC rating.',
-      'Delivered data-driven insights and reporting frameworks supporting IT and marketing functions.',
+      'Collaborated directly with the CEO and Finance Manager to build a 5-year strategic business plan and financial restructuring model to support group-level expansion.',
+      'Developed a fully custom in-house payroll system (Python, MongoDB, React JS) integrating data from multiple clock-in platforms, reduced a one-week manual payroll process to a single day.',
+      'Built an automated accounts receivable and invoicing system pulling live data from Nourish Care software, generating monthly and bi-weekly client invoices, cut a two-week cycle to one day.',
+      'Led website consolidation and digital infrastructure project, unified two company sites into a single high-performance platform with AI smart search, SEO optimisation, Google Ads and Meta Ads, Google Tag Manager, and Google Analytics 4.',
+      'Designed and deployed end-to-end business intelligence infrastructure, built KPI frameworks and interactive Power BI dashboards monitoring performance across HR, Finance, and Operations in real time.',
+      'Conducted deep-dive process analysis across all business units, identifying inefficiencies and implementing data-driven optimisations that materially reduced operational overhead.',
+      'Delivered an end-to-end HR automation suite covering training tracking, recruitment pipeline management, annual leave, appraisals, and QCS policy compliance.',
+      'Supported ISO 9001:2015 quality management audits and CQC inspections — both SD Care entities achieved a Good CQC rating.',
+      'Built and deployed an AI-powered companion app (Web, Android, iOS) for healthcare clients, improving client engagement and daily wellbeing communication.',
     ],
-    tech: ['Python', 'Power BI', 'PostgreSQL', 'Excel', 'SharePoint', 'ISO 9001'],
+    tech: ['Python', 'Power BI', 'PostgreSQL', 'MongoDB', 'React JS', 'Next.js', 'Excel', 'SharePoint', 'ISO 9001', 'Google Analytics 4', 'Google Tag Manager'],
   },
   {
     title: 'IT Executive',
@@ -28,11 +32,15 @@ const jobs = [
     period: 'Nov 2023 – Jul 2024',
     current: false,
     bullets: [
-      'Partnered with Operations, Finance, HR, and Marketing to identify automation opportunities and implement AI-driven solutions.',
-      'Maintained and optimised systems and workflows across departments, reducing recurring manual overhead.',
-      'Developed dashboards and reporting tools to improve data visibility and executive decision-making.',
+      'Integrated and managed Mindbody CRM for Omnia Lifestyle Limited, handling pricing configuration, booking systems, therapist management, and website chatbot integration for digital client engagement.',
+      'Developed a Field Supervision Report application (phone, tablet, desktop) for the domiciliary care team — enabling live carer supervision, performance rating, feedback recording, and offline report generation.',
+      'Built an automated HR operations application combining annual leave computation, HR meeting invitation generation, and resignation acceptance processing, enabling the HR team to prepare and send documentation in minutes.',
+      'Developed an appraisal form application (AppSheet) where HR sets objectives, routes to line manager for review and rating, and the system auto-generates a formatted PDF on completion.',
+      'Built an in-house training tracker dashboard connected to CareSkills with live completion dashboards, targeted email actions, and automated weekly training status reminders.',
+      'Designed and implemented an end-to-end hiring process tracker on Monday.com covering the full recruitment pipeline from CV receipt through to onboarding, with a centralised employee database.',
+      'Acted as the internal technical lead bridging business requirements and technology delivery across HR, Finance, Operations, and Marketing.',
     ],
-    tech: ['AI Automation', 'Power BI', 'SharePoint', 'System Administration'],
+    tech: ['Mindbody CRM', 'AppSheet', 'Monday.com', 'CareSkills', 'AI Automation', 'Power BI', 'SharePoint', 'System Administration'],
   },
   {
     title: 'Data Analyst',
@@ -42,24 +50,12 @@ const jobs = [
     period: 'Oct 2022 – Jul 2023',
     current: false,
     bullets: [
-      'Designed dashboards and reporting templates supporting business decision-making and performance tracking.',
-      'Managed and optimised SharePoint and database systems, improving data accessibility and integrity.',
-      'Automated administrative workflows, reducing manual effort across HR and finance processes.',
+      'Designed dashboards and reporting templates to support business decision-making and performance tracking.',
+      'Managed and optimised SharePoint and database systems to improve data accessibility and integrity.',
+      'Automated administrative workflows, reducing manual effort for HR and finance processes.',
       'Provided analytical insights for project planning, recruitment administration, and performance management.',
     ],
     tech: ['Python', 'Power BI', 'Excel', 'SharePoint', 'SQL'],
-  },
-  {
-    title: 'Data & Analytics',
-    company: 'Videnda',
-    fullCompany: 'Videnda',
-    location: 'India',
-    period: 'Oct 2020 – Sep 2021',
-    current: false,
-    bullets: [
-      'Built foundational data analytics skills across business intelligence, reporting, and data pipeline management.',
-    ],
-    tech: ['Python', 'Data Analysis', 'Reporting'],
   },
 ]
 
@@ -69,16 +65,12 @@ const education = [
     school: 'University of Surrey',
     location: 'Guildford, United Kingdom',
     period: 'Sep 2021 – Sep 2022',
-    grade: 'Merit',
-    modules: ['Predictive Modelling', 'Business Intelligence', 'Statistical Analysis', 'Data Visualisation', 'Operations Research'],
   },
   {
-    degree: 'BEng Electrical Engineering',
+    degree: 'BSc Electrical Engineering',
     school: 'Kakatiya Institute of Technology & Science',
-    location: 'Telangana, India',
+    location: 'Warangal, India',
     period: 'Jun 2016 – Jun 2020',
-    grade: 'First Class',
-    modules: ['Circuit Analysis', 'Power Systems', 'Control Systems', 'Signal Processing'],
   },
 ]
 
@@ -105,7 +97,6 @@ export default function Experience() {
           </h2>
         </motion.div>
 
-        {/* Work experience */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '40px', alignItems: 'start', marginBottom: '80px' }}>
 
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={fadeUp}
@@ -278,7 +269,7 @@ export default function Experience() {
                 <p style={{ fontSize: '15px', color: 'var(--accent)', fontWeight: 500, marginBottom: '16px' }}>
                   {edu.school}
                 </p>
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   <span style={{
                     fontFamily: 'monospace', fontSize: '11px', color: 'var(--muted)',
                     background: 'var(--surface)', padding: '4px 12px', borderRadius: '6px',
@@ -289,20 +280,6 @@ export default function Experience() {
                     background: 'var(--surface)', padding: '4px 12px', borderRadius: '6px',
                     border: '1px solid var(--faint)', letterSpacing: '0.04em',
                   }}>{edu.location}</span>
-                  <span style={{
-                    fontFamily: 'monospace', fontSize: '11px', color: 'var(--green)',
-                    background: 'rgba(74,222,128,0.1)', padding: '4px 12px', borderRadius: '6px',
-                    border: '1px solid rgba(74,222,128,0.25)', letterSpacing: '0.04em',
-                  }}>✓ {edu.grade}</span>
-                </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                  {edu.modules.map(m => (
-                    <span key={m} style={{
-                      fontFamily: 'monospace', fontSize: '10px', color: 'var(--muted)',
-                      background: 'var(--surface)', padding: '3px 10px',
-                      borderRadius: '4px', border: '1px solid var(--faint)',
-                    }}>{m}</span>
-                  ))}
                 </div>
               </motion.div>
             ))}
