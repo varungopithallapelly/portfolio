@@ -44,7 +44,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     `
   }} />
 </head>
-      <body>{children}</body>
+      <body>
+  {/* Google Tag Manager (noscript) */}
+  <noscript dangerouslySetInnerHTML={{
+    __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-ND4Z9NR5" height="0" width="0" style="display:none;visibility:hidden"></iframe>`
+  }} />
+  {children}
+</body>
     </html>
   )
 }
