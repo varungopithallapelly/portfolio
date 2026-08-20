@@ -26,7 +26,6 @@ const sections = [
     title: 'Two Environments, Kept Apart',
     desc: 'Generating and training need different Python versions, so they get separate installs. Mixing them breaks both.',
     color: '#4CC9F0',
-    icon: '⚙️',
     items: [
       { label: 'Generating — ComfyUI', detail: 'Python 3.13, torch 2.12.0+xpu, AnimateDiff-Evolved, Advanced-ControlNet, VideoHelperSuite, IPAdapter_plus', icon: '🖥️' },
       { label: 'Training — sd-lora-trainer', detail: 'Python 3.12, XPU fork of eden\'s trainer patched for Intel Arc instead of CUDA', icon: '🧠' },
@@ -37,7 +36,6 @@ const sections = [
     title: 'The Pipeline',
     desc: 'Photos in, animated character out. The trained LoRA is the hinge: produced once by the trainer, then reused forever inside ComfyUI.',
     color: '#5BD99C',
-    icon: '🔄',
     items: [
       { label: 'Input', detail: '20–30 photos of one person. Vary angle, lighting, outfit and background.', icon: '📸' },
       { label: 'Preprocess', detail: 'Florence auto-captions each image. CLIPSeg segments the face and crops around it.', icon: '✂️' },
@@ -51,7 +49,6 @@ const sections = [
     title: 'Setting Up the Trainer',
     desc: 'Install Git and Python 3.12 alongside 3.13. Clone the XPU fork. Build a separate venv. Install torch from the Intel wheel index.',
     color: '#4CC9F0',
-    icon: '🛠️',
     items: [
       { label: 'torch 2.12.0+xpu', detail: 'Installed from the Intel wheel index, not PyPI', icon: '🔥' },
       { label: 'Base model', detail: 'Juggernaut Reborn (SD 1.5), downloaded manually via curl.exe', icon: '📥' },
@@ -63,7 +60,6 @@ const sections = [
     title: 'The Fixes No Tutorial Mentions',
     desc: 'Every one of these is a Linux or CUDA assumption baked into tooling never tested on Windows with Intel Arc.',
     color: '#F4A62A',
-    icon: '🔧',
     items: [
       { label: 'Requirements file broken', detail: 'pip rejects +xpu version labels with >=. Fix: install torch separately, filter the requirements.', icon: 'A' },
       { label: 'wget missing on Windows', detail: 'Model downloader silently fails. Fix: download with curl.exe manually.', icon: 'B' },
@@ -79,7 +75,6 @@ const sections = [
     title: 'What This Actually Gets You',
     desc: 'A capable free pipeline, not a local copy of a commercial video service.',
     color: '#5BD99C',
-    icon: '✅',
     items: [
       { label: 'Works well', detail: 'Strong still images. Quick 25-min training. Medium shots animate well. Everything stays on your machine.', icon: '✅' },
       { label: 'Know the limits', detail: 'Faces drift between frames. SD 1.5 anatomy is loose. SDXL/Flux need more VRAM. LoRA is architecture-locked.', icon: '⚠️' },
