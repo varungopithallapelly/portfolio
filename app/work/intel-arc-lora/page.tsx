@@ -23,6 +23,7 @@ const carouselImages = [
 const sections = [
   {
     num: '01',
+    icon: '🧩',
     title: 'Two Environments, Kept Apart',
     desc: 'Generating and training need different Python versions, so they get separate installs. Mixing them breaks both.',
     color: '#4CC9F0',
@@ -33,6 +34,7 @@ const sections = [
   },
   {
     num: '02',
+    icon: '🔁',
     title: 'The Pipeline',
     desc: 'Photos in, animated character out. The trained LoRA is the hinge: produced once by the trainer, then reused forever inside ComfyUI.',
     color: '#5BD99C',
@@ -46,6 +48,7 @@ const sections = [
   },
   {
     num: '03',
+    icon: '🛠️',
     title: 'Setting Up the Trainer',
     desc: 'Install Git and Python 3.12 alongside 3.13. Clone the XPU fork. Build a separate venv. Install torch from the Intel wheel index.',
     color: '#4CC9F0',
@@ -57,6 +60,7 @@ const sections = [
   },
   {
     num: '04',
+    icon: '🩹',
     title: 'The Fixes No Tutorial Mentions',
     desc: 'Every one of these is a Linux or CUDA assumption baked into tooling never tested on Windows with Intel Arc.',
     color: '#F4A62A',
@@ -72,6 +76,7 @@ const sections = [
   },
   {
     num: '05',
+    icon: '🎯',
     title: 'What This Actually Gets You',
     desc: 'A capable free pipeline, not a local copy of a commercial video service.',
     color: '#5BD99C',
@@ -139,7 +144,7 @@ export default function IntelArcLoraPage() {
   const handleTouchStart = (e: React.TouchEvent) => { startX.current = e.touches[0].clientX }
   const handleTouchEnd = (e: React.TouchEvent) => {
     const diff = startX.current - e.changedTouches[0].clientX
-    if (Math.abs(diff) > 50) { diff > 0 ? next() : prev() }
+    if (Math.abs(diff) > 50) { if (diff > 0) next(); else prev() }
   }
 
   return (
@@ -292,7 +297,7 @@ export default function IntelArcLoraPage() {
           <h2 style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, letterSpacing: '-0.015em', marginBottom: '40px' }}>How it works</h2>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'clamp(200px, 25%, 260px) 1fr', gap: '24px', alignItems: 'start' }}>
+        <div className="grid items-start gap-6 md:grid-cols-[clamp(200px,25%,260px)_minmax(0,1fr)]">
 
           {/* Left tabs */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', position: 'sticky', top: '80px' }}>

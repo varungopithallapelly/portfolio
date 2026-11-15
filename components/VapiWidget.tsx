@@ -1,41 +1,39 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Mic, MicOff, PhoneOff, Sparkles, X } from 'lucide-react'
 
-// REPLACE THESE WITH YOUR VAPI CREDENTIALS
+// Public (client-side) VAPI identifiers
 const VAPI_PUBLIC_KEY = 'ae05102d-6db4-429e-be3a-7373ff67117d'
 const VAPI_ASSISTANT_ID = '20179215-b12a-428f-8032-3a3798aab51a'
 
 type CallStatus = 'idle' | 'connecting' | 'active' | 'ended'
+type VapiLike = { stop: () => void; setMuted: (m: boolean) => void }
 
 export default function VapiWidget() {
   const [status, setStatus] = useState<CallStatus>('idle')
   const [expanded, setExpanded] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const [volume, setVolume] = useState(0)
-  const vapiRef = useRef<unknown>(null)
-  const animRef = useRef<number>(0)
+  const [nudge, setNudge] = useState(false)
+  const vapiRef = useRef<VapiLike | null>(null)
 
   useEffect(() => {
-    return () => {
-      if (animRef.current) cancelAnimationFrame(animRef.current)
-    }
+    const t = setTimeout(() => setNudge(true), 6000)
+    return () => { clearTimeout(t); vapiRef.current?.stop() }
   }, [])
 
   const startCall = async () => {
-
     setStatus('connecting')
     try {
       const { default: Vapi } = await import('@vapi-ai/web')
       const vapi = new Vapi(VAPI_PUBLIC_KEY)
-      vapiRef.current = vapi
-
+      vapiRef.current = vapi as unknown as VapiLike
       vapi.on('call-start', () => setStatus('active'))
       vapi.on('call-end', () => { setStatus('ended'); setTimeout(() => setStatus('idle'), 2000) })
       vapi.on('volume-level', (v: number) => setVolume(v))
       vapi.on('error', () => setStatus('idle'))
-
       await vapi.start(VAPI_ASSISTANT_ID)
     } catch {
       setStatus('idle')
@@ -43,17 +41,13 @@ export default function VapiWidget() {
   }
 
   const endCall = () => {
-    if (vapiRef.current) {
-      (vapiRef.current as { stop: () => void }).stop()
-    }
+    vapiRef.current?.stop()
     setStatus('ended')
     setTimeout(() => setStatus('idle'), 2000)
   }
 
   const toggleMute = () => {
-    if (vapiRef.current) {
-      (vapiRef.current as { setMuted: (m: boolean) => void }).setMuted(!isMuted)
-    }
+    vapiRef.current?.setMuted(!isMuted)
     setIsMuted(!isMuted)
   }
 
@@ -61,144 +55,94 @@ export default function VapiWidget() {
   const isConnecting = status === 'connecting'
 
   return (
-    <div style={{ position: 'fixed', bottom: '28px', right: '28px', zIndex: 100, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '12px' }}>
-
+    <div className="fixed bottom-5 right-5 z-[100] flex flex-col items-end gap-3 sm:bottom-7 sm:right-7">
       <AnimatePresence>
         {expanded && (
           <motion.div
-            initial={{ opacity: 0, y: 12, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 12, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            style={{
-              background: 'var(--surface)', border: '1px solid var(--faint)',
-              borderRadius: '16px', padding: '20px', width: '280px',
-              boxShadow: '0 24px 64px rgba(0,0,0,0.4)',
-            }}
+            initial={{ opacity: 0, y: 12, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 12, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+            className="w-[300px] origin-bottom-right rounded-3xl border border-line bg-surface p-5 shadow-[var(--shadow-lg)]"
           >
-            {/* Header */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-              <div style={{
-                width: '36px', height: '36px', borderRadius: '50%',
-                background: 'rgba(200,169,110,0.15)', border: '1px solid rgba(200,169,110,0.3)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px',
-              }}>⚡</div>
-              <div>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)' }}>AI Voice Demo</div>
-                <div style={{ fontFamily: 'monospace', fontSize: '10px', color: 'var(--muted)', letterSpacing: '0.06em' }}>
-                  {isActive ? 'Live call · speak now' : isConnecting ? 'Connecting...' : 'Talk to my AI agent'}
-                </div>
+            <div className="mb-4 flex items-center gap-3">
+              <div className="grid size-10 place-items-center rounded-full bg-[color-mix(in_oklab,var(--accent)_14%,transparent)] text-accent">
+                <Sparkles size={18} />
               </div>
-              {isActive && (
-                <div style={{
-                  marginLeft: 'auto', display: 'flex', gap: '3px', alignItems: 'flex-end', height: '20px',
-                }}>
-                  {[...Array(5)].map((_, i) => (
-                    <motion.div key={i}
-                      animate={{ height: isActive ? `${Math.max(4, volume * 20 * (0.5 + Math.random() * 0.5))}px` : '4px' }}
-                      transition={{ duration: 0.1 }}
-                      style={{ width: '3px', background: 'var(--green)', borderRadius: '2px', minHeight: '4px' }}
-                    />
+              <div className="min-w-0 flex-1">
+                <p className="text-[14px] font-semibold text-ink">AI Voice Demo</p>
+                <p className="font-mono text-[11px] text-subtle">
+                  {isActive ? 'Live call · speak now' : isConnecting ? 'Connecting…' : 'Talk to my AI agent'}
+                </p>
+              </div>
+              {isActive ? (
+                <div className="flex h-5 items-end gap-[3px]">
+                  {[0.6, 1, 0.8, 1, 0.6].map((m, i) => (
+                    <motion.span key={i} animate={{ height: Math.max(4, volume * 22 * m) }} transition={{ duration: 0.1 }} className="w-[3px] rounded-full bg-green" style={{ minHeight: 4 }} />
                   ))}
                 </div>
+              ) : (
+                <button onClick={() => setExpanded(false)} aria-label="Close" className="grid size-8 place-items-center rounded-full text-subtle hover:bg-surface-2 hover:text-ink"><X size={16} /></button>
               )}
             </div>
 
-            {/* Description */}
             {status === 'idle' && (
-              <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '16px' }}>
-                Experience a live demo of the agentic AI voice system I built for 3 optical gallery clients. Ask it anything about booking, services, or pricing.
-              </p>
-            )}
-
-            {/* Action buttons */}
-            {status === 'idle' && (
-              <button onClick={startCall} style={{
-                width: '100%', padding: '12px',
-                background: 'var(--accent)', color: 'var(--bg)',
-                border: 'none', borderRadius: '8px', cursor: 'pointer',
-                fontFamily: 'monospace', fontSize: '12px', letterSpacing: '0.08em',
-                textTransform: 'uppercase', fontWeight: 600,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-              }}>
-                <span>🎤</span> Start Voice Demo
-              </button>
+              <>
+                <p className="mb-4 text-[13.5px] leading-relaxed text-muted">
+                  A live demo of the agentic AI voice system I built for 3 optical gallery clients. Ask it anything about booking, services, or pricing.
+                </p>
+                <button onClick={startCall} className="btn btn-primary h-11 w-full text-[14px]">
+                  <Mic size={16} /> Start voice demo
+                </button>
+              </>
             )}
 
             {isConnecting && (
-              <div style={{ textAlign: 'center', padding: '12px', fontFamily: 'monospace', fontSize: '12px', color: 'var(--muted)' }}>
-                <motion.span animate={{ opacity: [1, 0.3, 1] }} transition={{ repeat: Infinity, duration: 1 }}>
-                  Connecting...
-                </motion.span>
+              <div className="py-3 text-center font-mono text-[12px] text-muted">
+                <motion.span animate={{ opacity: [1, 0.3, 1] }} transition={{ repeat: Infinity, duration: 1 }}>Connecting…</motion.span>
               </div>
             )}
 
             {isActive && (
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <button onClick={toggleMute} style={{
-                  flex: 1, padding: '10px',
-                  background: isMuted ? 'rgba(239,68,68,0.15)' : 'var(--surface2)',
-                  color: isMuted ? '#EF4444' : 'var(--muted)',
-                  border: `1px solid ${isMuted ? 'rgba(239,68,68,0.3)' : 'var(--faint)'}`,
-                  borderRadius: '8px', cursor: 'pointer',
-                  fontFamily: 'monospace', fontSize: '11px', letterSpacing: '0.04em',
-                  transition: 'all 0.2s',
-                }}>
-                  {isMuted ? '🔇 Muted' : '🎤 Mute'}
+              <div className="flex gap-2">
+                <button onClick={toggleMute} className={`btn h-10 flex-1 text-[13px] ${isMuted ? 'border-[#D93025]/30 bg-[#D93025]/10 text-[#D93025]' : 'btn-ghost'}`}>
+                  {isMuted ? <><MicOff size={15} /> Muted</> : <><Mic size={15} /> Mute</>}
                 </button>
-                <button onClick={endCall} style={{
-                  flex: 1, padding: '10px',
-                  background: 'rgba(239,68,68,0.15)', color: '#EF4444',
-                  border: '1px solid rgba(239,68,68,0.3)',
-                  borderRadius: '8px', cursor: 'pointer',
-                  fontFamily: 'monospace', fontSize: '11px', letterSpacing: '0.04em',
-                }}>
-                  📵 End Call
+                <button onClick={endCall} className="btn h-10 flex-1 bg-[#D93025] text-[13px] text-white hover:bg-[#B3261E]">
+                  <PhoneOff size={15} /> End
                 </button>
               </div>
             )}
 
-            {status === 'ended' && (
-              <div style={{ textAlign: 'center', padding: '12px', fontFamily: 'monospace', fontSize: '12px', color: 'var(--green)' }}>
-                ✓ Call ended
-              </div>
-            )}
+            {status === 'ended' && <p className="py-3 text-center font-mono text-[12px] text-green">✓ Call ended</p>}
 
-            {/* Install note */}
-            <p style={{ fontFamily: 'monospace', fontSize: '9px', color: 'var(--faint)', marginTop: '12px', textAlign: 'center', letterSpacing: '0.04em' }}>
-              Powered by VAPI · Built by Varun
-            </p>
+            <p className="mt-4 text-center font-mono text-[10px] text-subtle">Powered by VAPI · Built by Varun</p>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Main FAB button */}
-      <motion.button
-        onClick={() => setExpanded(!expanded)}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        style={{
-          width: '56px', height: '56px', borderRadius: '50%',
-          background: isActive ? 'linear-gradient(135deg, #4ADE80, #22C55E)' : 'linear-gradient(135deg, #C8A96E, #B8860B)',
-          border: 'none', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '22px', boxShadow: isActive ? '0 0 24px rgba(74,222,128,0.4)' : '0 8px 32px rgba(200,169,110,0.3)',
-          transition: 'background 0.3s, box-shadow 0.3s',
-          position: 'relative',
-        }}
-      >
-        {isActive && (
-          <motion.div
-            animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-            transition={{ repeat: Infinity, duration: 1.5 }}
-            style={{
-              position: 'absolute', inset: 0, borderRadius: '50%',
-              background: 'rgba(74,222,128,0.3)',
-            }}
-          />
-        )}
-        {isActive ? '🎤' : '⚡'}
-      </motion.button>
+      <div className="flex items-center gap-3">
+        <AnimatePresence>
+          {nudge && !expanded && status === 'idle' && (
+            <motion.button
+              onClick={() => { setExpanded(true); setNudge(false) }}
+              initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }}
+              className="hidden rounded-full border border-line bg-surface px-4 py-2 text-[13px] font-medium text-ink shadow-[var(--shadow-md)] sm:block"
+            >
+              Talk to my AI agent 👋
+            </motion.button>
+          )}
+        </AnimatePresence>
+        <motion.button
+          onClick={() => { setExpanded(e => !e); setNudge(false) }}
+          whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }}
+          aria-label="AI voice demo"
+          className={`relative grid size-14 place-items-center rounded-full text-white shadow-[var(--shadow-lg)] transition-colors ${isActive ? 'bg-green' : 'bg-ink'}`}
+        >
+          {isActive && (
+            <motion.span animate={{ scale: [1, 1.6], opacity: [0.5, 0] }} transition={{ repeat: Infinity, duration: 1.4 }} className="absolute inset-0 rounded-full bg-green" />
+          )}
+          <span className={`relative ${isActive ? '' : 'text-bg'}`}>{isActive ? <Mic size={22} /> : <Sparkles size={22} />}</span>
+        </motion.button>
+      </div>
     </div>
   )
 }

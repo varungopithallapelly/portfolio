@@ -1,215 +1,165 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowUpRight, Check, Copy, Mail, Phone, Send } from 'lucide-react'
+import { profile, socials } from '@/lib/data'
+import { Magnetic, Reveal } from './ui'
+import { GithubIcon, InstagramIcon, LinkedinIcon } from './icons'
 
-const GithubIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
-  </svg>
-)
+type Status = 'idle' | 'sending' | 'sent' | 'error'
 
-const LinkedinIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-  </svg>
-)
+const reasons = ['A full-time role', 'A freelance project', 'An AI / automation idea', 'Just saying hi']
 
-const InstagramIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-  </svg>
-)
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="block">
+      <span className="mb-2 block font-mono text-[11px] uppercase tracking-[0.12em] text-subtle">{label}</span>
+      {children}
+    </label>
+  )
+}
 
-const PhoneIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-  </svg>
-)
-
-const EmailIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-  </svg>
-)
-
-const contacts = [
-  { icon: <EmailIcon />, label: 'thallapellyvarun@gmail.com', href: 'mailto:thallapellyvarun@gmail.com', color: '#C8A96E' },
-  { icon: <PhoneIcon />, label: '+44 7471 301 412', href: 'tel:+447471301412', color: '#4ADE80' },
-  { icon: <LinkedinIcon />, label: 'linkedin.com/in/varun-gopi-thallapelly', href: 'https://www.linkedin.com/in/varun-gopi-thallapelly/', color: '#0A66C2' },
-  { icon: <GithubIcon />, label: 'github.com/varungopithallapelly', href: 'https://github.com/varungopithallapelly', color: '#E8E6E0' },
-  { icon: <InstagramIcon />, label: '@__varun._', href: 'https://www.instagram.com/__varun._/', color: '#E1306C' },
-]
+const inputCls = 'w-full rounded-2xl border border-line bg-surface-2 px-4 py-3.5 text-[15px] text-ink placeholder:text-subtle outline-none transition-all focus:border-ink focus:bg-surface focus:shadow-[0_0_0_4px_color-mix(in_oklab,var(--accent)_15%,transparent)]'
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
-  const [hovered, setHovered] = useState<string | null>(null)
+  const [reason, setReason] = useState(reasons[0])
+  const [status, setStatus] = useState<Status>('idle')
+  const [copied, setCopied] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(profile.email); setCopied(true); setTimeout(() => setCopied(false), 1800) } catch {}
+  }
+
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     setStatus('sending')
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, message: `[${reason}]\n\n${form.message}` }),
       })
-      if (res.ok) { setStatus('sent'); setForm({ name: '', email: '', message: '' }) }
-      else setStatus('error')
+      if (res.ok) { setStatus('sent'); setForm({ name: '', email: '', message: '' }) } else setStatus('error')
     } catch { setStatus('error') }
   }
 
   return (
-    <section id="contact" style={{ padding: 'clamp(80px, 10vw, 120px) 0', background: 'var(--surface)' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 32px' }}>
-
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-          style={{ marginBottom: '56px' }}
-        >
-          <p style={{ fontFamily: 'monospace', fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.1em', marginBottom: '12px' }}>05. contact</p>
-          <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em', marginBottom: '16px' }}>
-            Get In Touch
-          </h2>
-          <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.8, maxWidth: '520px' }}>
-            Open to new roles, freelance projects, and interesting conversations. My inbox is always open.
-          </p>
-        </motion.div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '48px', alignItems: 'start' }}>
-
-          {/* Contact links */}
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }}
-            style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
-          >
-            {contacts.map(c => (
-              <a
-                key={c.label}
-                href={c.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                onMouseEnter={() => setHovered(c.label)}
-                onMouseLeave={() => setHovered(null)}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: '14px',
-                  padding: '16px 20px',
-                  background: hovered === c.label ? 'var(--bg)' : 'var(--surface2)',
-                  border: hovered === c.label ? `1px solid ${c.color}40` : '1px solid var(--faint)',
-                  borderRadius: '12px', textDecoration: 'none',
-                  transition: 'all 0.2s',
-                  boxShadow: hovered === c.label ? `0 8px 32px ${c.color}15` : 'none',
-                }}
-              >
-                <div style={{
-                  width: '40px', height: '40px', borderRadius: '10px',
-                  background: `${c.color}15`, border: `1px solid ${c.color}30`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: c.color, flexShrink: 0, transition: 'transform 0.2s',
-                  transform: hovered === c.label ? 'scale(1.1)' : 'scale(1)',
-                }}>
-                  {c.icon}
+    <section id="contact" className="relative py-[clamp(90px,12vw,150px)]">
+      <div className="mx-auto max-w-[1180px] px-5 sm:px-8">
+        <div className="card overflow-hidden">
+          <div className="grid lg:grid-cols-[1fr_1.1fr]">
+            {/* Left: pitch */}
+            <div className="relative overflow-hidden bg-[#1B1913] p-8 text-[#F4F0E8] sm:p-12">
+              <div className="pointer-events-none absolute -bottom-32 -left-20 size-96 rounded-full bg-accent opacity-40 blur-3xl" />
+              <div className="pointer-events-none absolute -right-20 -top-24 size-72 rounded-full bg-violet opacity-30 blur-3xl" />
+              <div className="relative">
+                <div className="mb-6 flex items-center gap-3">
+                  <span className="font-mono text-xs opacity-60">07</span>
+                  <span className="h-px w-10 bg-current opacity-30" />
+                  <span className="font-mono text-xs uppercase tracking-[0.14em] opacity-80">Contact</span>
                 </div>
-                <span style={{
-                  fontSize: '13px', color: hovered === c.label ? 'var(--text)' : 'var(--muted)',
-                  fontFamily: 'monospace', letterSpacing: '0.02em',
-                  transition: 'color 0.2s', wordBreak: 'break-all',
-                }}>
-                  {c.label}
-                </span>
-                <motion.span
-                  animate={{ x: hovered === c.label ? 4 : 0 }}
-                  style={{ color: 'var(--accent)', marginLeft: 'auto', flexShrink: 0, fontSize: '14px' }}
+                <Reveal>
+                  <h2 className="font-display text-[clamp(40px,6vw,72px)] font-extrabold leading-[0.95] tracking-[-0.03em]">
+                    Let&apos;s build<br />something<br /><span className="italic font-medium text-accent">useful.</span>
+                  </h2>
+                </Reveal>
+                <p className="mt-6 max-w-[38ch] text-[16px] leading-relaxed opacity-75">
+                  Open to new roles, freelance projects, and interesting conversations. My inbox is always open.
+                </p>
+
+                <button
+                  onClick={copy}
+                  className="group mt-10 flex w-full max-w-[420px] items-center gap-3 rounded-2xl border border-white/15 bg-white/5 p-3 pl-4 text-left backdrop-blur transition-colors hover:bg-white/10"
                 >
-                  →
-                </motion.span>
-              </a>
-            ))}
-          </motion.div>
+                  <Mail size={18} className="shrink-0 opacity-70" />
+                  <span className="flex-1 truncate text-[15px] font-medium">{profile.email}</span>
+                  <span className="relative grid h-9 min-w-[92px] place-items-center rounded-xl bg-[#F4F0E8] px-3 text-[13px] font-semibold text-[#18160F]">
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.span key={copied ? 'y' : 'n'} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} className="flex items-center gap-1.5">
+                        {copied ? <><Check size={14} /> Copied</> : <><Copy size={14} /> Copy</>}
+                      </motion.span>
+                    </AnimatePresence>
+                  </span>
+                </button>
 
-          {/* Form */}
-          <motion.form
-            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            onSubmit={handleSubmit}
-            style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
-          >
-            {[
-              { key: 'name', label: 'Name', type: 'text', placeholder: 'Your name' },
-              { key: 'email', label: 'Email', type: 'email', placeholder: 'your@email.com' },
-            ].map(field => (
-              <div key={field.key}>
-                <label style={{ fontFamily: 'monospace', fontSize: '10px', color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>
-                  {field.label}
-                </label>
-                <input
-                  type={field.type} required
-                  value={form[field.key as 'name' | 'email']}
-                  onChange={e => setForm({ ...form, [field.key]: e.target.value })}
-                  placeholder={field.placeholder}
-                  style={{
-                    width: '100%', background: 'var(--bg)', border: '1px solid var(--faint)',
-                    borderRadius: '8px', padding: '12px 16px',
-                    fontFamily: 'monospace', fontSize: '13px', color: 'var(--text)',
-                    outline: 'none', transition: 'border-color 0.2s',
-                  }}
-                  onFocus={e => (e.target as HTMLInputElement).style.borderColor = 'var(--accent)'}
-                  onBlur={e => (e.target as HTMLInputElement).style.borderColor = 'var(--faint)'}
-                />
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {[
+                    { l: 'LinkedIn', h: socials.linkedin, i: <LinkedinIcon size={16} /> },
+                    { l: 'GitHub', h: socials.github, i: <GithubIcon size={16} /> },
+                    { l: 'Instagram', h: socials.instagram, i: <InstagramIcon size={16} /> },
+                    { l: profile.phone, h: profile.phoneHref, i: <Phone size={16} /> },
+                  ].map(s => (
+                    <Magnetic key={s.l} strength={0.2}>
+                      <a href={s.h} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-full border border-white/15 px-3.5 py-2 text-[13px] font-medium opacity-85 transition-all hover:bg-white/10 hover:opacity-100">
+                        {s.i}{s.l}
+                      </a>
+                    </Magnetic>
+                  ))}
+                </div>
               </div>
-            ))}
-
-            <div>
-              <label style={{ fontFamily: 'monospace', fontSize: '10px', color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>
-                Message
-              </label>
-              <textarea
-                required value={form.message}
-                onChange={e => setForm({ ...form, message: e.target.value })}
-                placeholder="Tell me about the role or project..."
-                rows={5}
-                style={{
-                  width: '100%', background: 'var(--bg)', border: '1px solid var(--faint)',
-                  borderRadius: '8px', padding: '12px 16px',
-                  fontFamily: 'monospace', fontSize: '13px', color: 'var(--text)',
-                  outline: 'none', resize: 'vertical', transition: 'border-color 0.2s',
-                }}
-                onFocus={e => (e.target as HTMLTextAreaElement).style.borderColor = 'var(--accent)'}
-                onBlur={e => (e.target as HTMLTextAreaElement).style.borderColor = 'var(--faint)'}
-              />
             </div>
 
-            <motion.button
-              type="submit" disabled={status === 'sending'}
-              whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}
-              style={{
-                fontFamily: 'monospace', fontSize: '12px', letterSpacing: '0.08em',
-                textTransform: 'uppercase', padding: '14px 32px',
-                background: status === 'sent' ? 'rgba(74,222,128,0.15)' : 'var(--accent)',
-                color: status === 'sent' ? 'var(--green)' : 'var(--bg)',
-                border: status === 'sent' ? '1px solid rgba(74,222,128,0.4)' : 'none',
-                borderRadius: '8px', cursor: status === 'sending' ? 'not-allowed' : 'pointer',
-                fontWeight: 600, transition: 'all 0.2s',
-                opacity: status === 'sending' ? 0.7 : 1,
-              }}
-            >
-              {status === 'sending' ? 'Sending...' : status === 'sent' ? '✓ Message Sent' : status === 'error' ? 'Try Again' : 'Send Message →'}
-            </motion.button>
+            {/* Right: form */}
+            <form onSubmit={submit} className="space-y-5 p-8 sm:p-12">
+              <div>
+                <span className="mb-3 block font-mono text-[11px] uppercase tracking-[0.12em] text-subtle">I&apos;m reaching out about</span>
+                <div className="flex flex-wrap gap-2">
+                  {reasons.map(r => (
+                    <button
+                      type="button" key={r} onClick={() => setReason(r)} aria-pressed={reason === r}
+                      className={`rounded-full border px-4 py-2 text-[14px] font-medium transition-all ${reason === r ? 'border-ink bg-ink text-bg' : 'border-line bg-surface-2 text-muted hover:border-line-strong hover:text-ink'}`}
+                    >
+                      {r}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-            {status === 'error' && (
-              <p style={{ fontFamily: 'monospace', fontSize: '12px', color: '#EF4444', marginTop: '4px' }}>
-                Something went wrong. Email me directly at thallapellyvarun@gmail.com
-              </p>
-            )}
-          </motion.form>
-        </div>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <Field label="Name">
+                  <input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Your name" className={inputCls} />
+                </Field>
+                <Field label="Email">
+                  <input required type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="you@company.com" className={inputCls} />
+                </Field>
+              </div>
+              <Field label="Message">
+                <textarea required rows={5} value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="Tell me about the role or project…" className={`${inputCls} resize-y`} />
+              </Field>
 
-        {/* Footer */}
-        <div style={{ marginTop: '80px', paddingTop: '32px', borderTop: '1px solid var(--faint)', textAlign: 'center' }}>
-          <p style={{ fontFamily: 'monospace', fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.04em' }}>
-            Designed & Built by <span style={{ color: 'var(--accent)' }}>Varun Thallapelly</span> · Guildford, United Kingdom
-          </p>
+              <div className="flex flex-wrap items-center gap-4 pt-1">
+                <button type="submit" disabled={status === 'sending'} className={`btn min-w-[180px] ${status === 'sent' ? 'bg-green text-white' : 'btn-primary'} disabled:opacity-70`}>
+                  {status === 'sending' ? <><span className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> Sending…</>
+                    : status === 'sent' ? <><Check size={17} /> Message sent</>
+                    : <><Send size={16} /> {status === 'error' ? 'Try again' : 'Send message'}</>}
+                </button>
+                {status === 'error' && <p className="text-[14px] text-[#D93025]">Something went wrong. Email me directly at {profile.email}.</p>}
+                {status === 'sent' && <p className="text-[14px] text-muted">Thanks! I&apos;ll get back to you soon.</p>}
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </section>
+  )
+}
+
+export function Footer() {
+  return (
+    <footer className="relative border-t border-line py-10">
+      <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-4 px-5 text-[14px] text-muted sm:px-8">
+        <p>
+          Designed &amp; built by <span className="font-semibold text-ink">{profile.name}</span> · {profile.location}
+        </p>
+        <div className="flex items-center gap-4">
+          <span className="hidden items-center gap-1.5 font-mono text-[12px] text-subtle sm:flex">Press <span className="kbd">Ctrl</span><span className="kbd">K</span> to search</span>
+          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="inline-flex items-center gap-1.5 font-semibold text-ink underline-draw">
+            Back to top <ArrowUpRight size={15} className="-rotate-45" />
+          </button>
+        </div>
+      </div>
+    </footer>
   )
 }

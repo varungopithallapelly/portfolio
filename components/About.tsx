@@ -1,124 +1,141 @@
 'use client'
 
-import { motion, Variants } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { ArrowUpRight, Briefcase, GraduationCap, Mail, MapPin, Phone } from 'lucide-react'
+import { education, jobs, profile, socials } from '@/lib/data'
+import { Reveal, SectionHeading, SpotlightCard } from './ui'
+import { GithubIcon, InstagramIcon, LinkedinIcon } from './icons'
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] } }
+function LiveClock() {
+  const [now, setNow] = useState<Date | null>(null)
+  useEffect(() => {
+    const tick = () => setNow(new Date())
+    const t0 = setTimeout(tick, 0)
+    const t = setInterval(tick, 1000)
+    return () => { clearTimeout(t0); clearInterval(t) }
+  }, [])
+
+  const fmt = (o: Intl.DateTimeFormatOptions) => now ? new Intl.DateTimeFormat('en-GB', { timeZone: profile.timezone, ...o }).format(now) : '--'
+  const hour = now ? Number(fmt({ hour: '2-digit', hour12: false })) : 12
+  const awake = hour >= 8 && hour < 23
+
+  return (
+    <div>
+      <div className="font-display text-[clamp(40px,5vw,56px)] font-bold leading-none tracking-tight text-ink tabular-nums">
+        {fmt({ hour: '2-digit', minute: '2-digit', hour12: false })}
+        <span className="ml-1 text-[0.45em] font-medium text-subtle">:{fmt({ second: '2-digit' }).padStart(2, '0')}</span>
+      </div>
+      <p className="mt-3 flex items-center gap-2 text-[13px] text-muted">
+        <span className={`size-2 rounded-full ${awake ? 'bg-green pulse-dot' : 'bg-subtle'}`} />
+        {awake ? 'Probably awake. Replies are quick.' : 'Probably asleep. I’ll reply in the morning.'}
+      </p>
+    </div>
+  )
 }
 
-const socialLinks = [
-  { label: 'GitHub', href: 'https://github.com/varungopithallapelly', color: '#E8E6E0', bg: 'rgba(232,230,224,0.1)', border: 'rgba(232,230,224,0.2)' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/varun-gopi-thallapelly/', color: '#0A66C2', bg: 'rgba(10,102,194,0.15)', border: 'rgba(10,102,194,0.4)' },
-  { label: 'Instagram', href: 'https://www.instagram.com/__varun._/', color: '#E1306C', bg: 'rgba(225,48,108,0.12)', border: 'rgba(225,48,108,0.35)' },
-  { label: 'Email', href: 'mailto:thallapellyvarun@gmail.com', color: '#C8A96E', bg: 'rgba(200,169,110,0.12)', border: 'rgba(200,169,110,0.35)' },
-  { label: '+44 7471 301 412', href: 'tel:+447471301412', color: '#4ADE80', bg: 'rgba(74,222,128,0.1)', border: 'rgba(74,222,128,0.3)' },
+const links = [
+  { label: 'GitHub', href: socials.github, icon: <GithubIcon size={18} />, hue: 'var(--ink)' },
+  { label: 'LinkedIn', href: socials.linkedin, icon: <LinkedinIcon size={18} />, hue: '#0A66C2' },
+  { label: 'Instagram', href: socials.instagram, icon: <InstagramIcon size={18} />, hue: '#E1306C' },
+  { label: 'Email', href: socials.email, icon: <Mail size={18} />, hue: 'var(--accent)' },
+  { label: profile.phone, href: profile.phoneHref, icon: <Phone size={18} />, hue: 'var(--green)' },
 ]
 
 export default function About() {
+  const current = jobs.find(j => j.current)!
+
   return (
-    <section id="about" style={{ padding: 'clamp(80px, 10vw, 120px) 0', background: 'var(--bg)' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 32px' }}>
+    <section id="about" className="relative py-[clamp(90px,12vw,150px)]">
+      <div className="mx-auto max-w-[1180px] px-5 sm:px-8">
+        <SectionHeading
+          index="01"
+          eyebrow="About"
+          title={<>Software people <span className="italic font-medium text-accent">actually</span> use.</>}
+          intro="Not dashboards that only look good in demos. Systems teams open every single day, and that make a measurable difference to how a business runs."
+        />
 
-        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={fadeUp}
-          style={{ marginBottom: '56px' }}
-        >
-          <p style={{ fontFamily: 'monospace', fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.1em', marginBottom: '12px' }}>01. about</p>
-          <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em' }}>
-            Who I Am
-          </h2>
-        </motion.div>
+        <div className="mt-14 grid gap-4 md:grid-cols-6">
+          {/* Bio */}
+          <Reveal className="md:col-span-4 md:row-span-2">
+            <SpotlightCard className="h-full p-7 sm:p-9">
+              <p className="eyebrow mb-5">The short version</p>
+              <div className="space-y-5 text-[16.5px] leading-[1.8] text-muted">
+                <p>
+                  I&apos;m a <strong className="font-semibold text-ink">Data Analyst and AI Solutions Developer</strong> based in Guildford, with an MSc in
+                  Business Analytics from the University of Surrey. I specialise in turning messy data and complex business problems into clean,
+                  automated systems that save real time and cost.
+                </p>
+                <p>
+                  At SD Care, I&apos;ve built everything from a fully custom payroll system that reduced a week-long process to a single day, to an
+                  agentic AI voice system serving 3 optical franchise clients simultaneously, handling 72 languages, real-time tone analysis, and
+                  24/7 inbound call management.
+                </p>
+                <p>
+                  I care about <strong className="font-semibold text-ink">building things that actually work</strong>: software that teams use every
+                  day and that makes a measurable difference.
+                </p>
+              </div>
+            </SpotlightCard>
+          </Reveal>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '64px', alignItems: 'start' }}>
+          {/* Clock */}
+          <Reveal delay={0.05} className="md:col-span-2">
+            <SpotlightCard className="h-full p-7" spot="var(--blue)">
+              <p className="mb-4 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-subtle">
+                <MapPin size={13} /> Guildford · local time
+              </p>
+              <LiveClock />
+            </SpotlightCard>
+          </Reveal>
 
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={fadeUp}
-            style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
-          >
-            <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.9 }}>
-              I&apos;m a <strong style={{ color: 'var(--text)', fontWeight: 500 }}>Data Analyst and AI Solutions Developer</strong> based
-              in Guildford, United Kingdom, with an MSc in Business Analytics from the University of Surrey. I specialise in
-              turning messy data and complex business problems into clean, automated systems that save real time and cost.
-            </p>
-            <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.9 }}>
-              At SD Care, I&apos;ve built everything from a fully custom payroll system that reduced a week-long process to a single
-              day, to an agentic AI voice system serving 3 optical franchise clients simultaneously handling 72 languages,
-              real-time tone analysis, and 24/7 inbound call management.
-            </p>
-            <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.9 }}>
-              I care about <strong style={{ color: 'var(--text)', fontWeight: 500 }}>building things that actually work</strong>, not
-              just dashboards that look good in demos, but software that teams use every single day and that make a measurable
-              difference to how a business operates.
-            </p>
+          {/* Currently */}
+          <Reveal delay={0.1} className="md:col-span-2">
+            <SpotlightCard className="h-full p-7" spot="var(--green)">
+              <p className="mb-4 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-subtle">
+                <Briefcase size={13} /> Currently
+              </p>
+              <p className="font-display text-[22px] font-bold leading-tight tracking-tight text-ink">{current.title}</p>
+              <p className="mt-1 text-[15px] text-muted">{current.company}</p>
+              <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklab,var(--green)_12%,transparent)] px-3 py-1 font-mono text-[11px] text-green">
+                <span className="size-1.5 rounded-full bg-green pulse-dot" /> {current.period}
+              </p>
+            </SpotlightCard>
+          </Reveal>
 
-            {/* Eye-catching link buttons */}
-            <div style={{ display: 'flex', gap: '10px', marginTop: '8px', flexWrap: 'wrap' }}>
-              {socialLinks.map(link => (
+          {/* Education */}
+          {education.map((e, i) => (
+            <Reveal key={e.degree} delay={0.05 * i} className="md:col-span-3">
+              <SpotlightCard className="group h-full p-7" spot="var(--violet)">
+                <div className="flex items-start justify-between gap-4">
+                  <span className="grid size-11 place-items-center rounded-xl border border-line bg-surface-2 text-violet transition-transform group-hover:-rotate-6">
+                    <GraduationCap size={20} />
+                  </span>
+                  <span className="font-mono text-[11px] text-subtle">{e.period}</span>
+                </div>
+                <p className="mt-6 font-display text-[21px] font-bold leading-tight tracking-tight text-ink">{e.degree}</p>
+                <p className="mt-1 text-[15px] text-muted">{e.school}</p>
+                <p className="mt-1 text-[13px] text-subtle">{e.location}</p>
+              </SpotlightCard>
+            </Reveal>
+          ))}
+
+          {/* Links */}
+          <Reveal className="md:col-span-6">
+            <div className="card flex flex-wrap items-center gap-2 p-3">
+              <span className="px-3 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-subtle">Find me on</span>
+              {links.map(l => (
                 <a
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    fontFamily: 'monospace', fontSize: '11px',
-                    color: link.color,
-                    background: link.bg,
-                    border: `1px solid ${link.border}`,
-                    padding: '7px 14px', borderRadius: '8px',
-                    textDecoration: 'none', letterSpacing: '0.04em',
-                    transition: 'all 0.2s',
-                    display: 'inline-flex', alignItems: 'center', gap: '5px',
-                    fontWeight: 500,
-                  }}
-                  onMouseEnter={e => {
-                    const el = e.currentTarget as HTMLElement
-                    el.style.transform = 'translateY(-2px)'
-                    el.style.boxShadow = `0 4px 16px ${link.border}`
-                  }}
-                  onMouseLeave={e => {
-                    const el = e.currentTarget as HTMLElement
-                    el.style.transform = 'translateY(0)'
-                    el.style.boxShadow = 'none'
-                  }}
+                  key={l.label} href={l.href} target="_blank" rel="noopener noreferrer"
+                  className="group flex items-center gap-2.5 rounded-full border border-line bg-surface-2 py-2 pl-2.5 pr-4 text-[14px] font-medium text-ink transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
+                  style={{ ['--c' as string]: l.hue }}
                 >
-                  {link.label} ↗
+                  <span className="grid size-7 place-items-center rounded-full bg-surface text-[var(--c)]">{l.icon}</span>
+                  {l.label}
+                  <ArrowUpRight size={14} className="text-subtle transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </a>
               ))}
             </div>
-          </motion.div>
-
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={fadeUp}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {[
-                { category: 'Data & Analytics', color: '#C8A96E', items: ['Python', 'R Studio', 'Power BI', 'PostgreSQL', 'MS Excel', 'SPSS'] },
-                { category: 'AI & Automation', color: '#4ADE80', items: ['Agentic AI', 'NLP', 'Sentiment Analysis', 'Voice Agents', 'Workflow Automation'] },
-                { category: 'Development', color: '#7C9EFF', items: ['React JS', 'Next.js', 'MongoDB', 'Python Backend', 'API Integration'] },
-                { category: 'Web & Marketing', color: '#EC4899', items: ['SEO', 'Core Web Vitals', 'Google Ads', 'Meta Ads', 'Smart Search'] },
-                { category: 'Business', color: '#F97316', items: ['KPI Design', 'Financial Modelling', 'ISO 9001', 'CQC Audit', 'SharePoint'] },
-              ].map(group => (
-                <div key={group.category} style={{
-                  background: 'var(--surface)', border: '1px solid var(--faint)',
-                  borderRadius: '10px', padding: '14px 18px',
-                  borderLeft: `3px solid ${group.color}`,
-                }}>
-                  <p style={{
-                    fontFamily: 'monospace', fontSize: '10px', color: group.color,
-                    letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '10px', fontWeight: 600,
-                  }}>{group.category}</p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                    {group.items.map(item => (
-                      <span key={item} style={{
-                        fontFamily: 'monospace', fontSize: '11px', color: 'var(--text)',
-                        background: `${group.color}15`,
-                        border: `1px solid ${group.color}30`,
-                        padding: '3px 10px', borderRadius: '100px',
-                        fontWeight: 500,
-                      }}>{item}</span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+          </Reveal>
         </div>
       </div>
     </section>

@@ -1,37 +1,34 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useContext, useSyncExternalStore } from 'react'
 
-const ThemeContext = createContext<{ theme: string; toggleTheme: () => void }>({
-  theme: 'dark',
+type Theme = 'light' | 'dark'
+
+const ThemeContext = createContext<{ theme: Theme; toggleTheme: () => void }>({
+  theme: 'light',
   toggleTheme: () => {},
 })
 
 export const useTheme = () => useContext(ThemeContext)
 
-export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState('dark')
-  const [mounted, setMounted] = useState(false)
+// The inline script in app/layout.tsx sets data-theme on <html> before paint
+// (default: light). The DOM attribute is the source of truth; we subscribe to it.
+const subscribe = (cb: () => void) => {
+  const mo = new MutationObserver(cb)
+  mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+  return () => mo.disconnect()
+}
+const getSnapshot = (): Theme => (document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light')
+const getServerSnapshot = (): Theme => 'light'
 
-  useEffect(() => {
-    const saved = localStorage.getItem('theme') || 'dark'
-    setTheme(saved)
-    document.documentElement.setAttribute('data-theme', saved)
-    setMounted(true)
+export default function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
+
+  const toggleTheme = useCallback(() => {
+    const next: Theme = getSnapshot() === 'dark' ? 'light' : 'dark'
+    document.documentElement.setAttribute('data-theme', next)
+    try { localStorage.setItem('theme', next) } catch {}
   }, [])
 
-  const toggleTheme = () => {
-    const next = theme === 'dark' ? 'light' : 'dark'
-    setTheme(next)
-    localStorage.setItem('theme', next)
-    document.documentElement.setAttribute('data-theme', next)
-  }
-
-  if (!mounted) return null
-
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  )
+  return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>
 }
