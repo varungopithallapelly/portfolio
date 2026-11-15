@@ -1,41 +1,86 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Varun Thallapelly — Portfolio
 
-## Getting Started
+**Data Analyst & AI Solutions Developer · Guildford, UK**
 
-First, run the development server:
+🌐 **Live site:** [www.varunthallapelly.com](https://www.varunthallapelly.com)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+[![Portfolio preview](https://www.varunthallapelly.com/opengraph-image)](https://www.varunthallapelly.com)
+
+I build data systems, automations and AI agents that teams use every day. This repo is the source for my personal portfolio.
+
+---
+
+## Highlights of the work shown
+
+| Project | Outcome |
+| --- | --- |
+| [Agentic AI Customer Support](https://www.varunthallapelly.com/projects/ai-agent) | One voice agent serving 3 franchise clients, 24/7, in 72 languages |
+| [In-House Payroll Software](https://www.varunthallapelly.com/projects/payroll) | 1-week payroll process cut to 1 day; timesheets in under 5 seconds |
+| [Accounts Receivable & Invoicing](https://www.varunthallapelly.com/projects/invoicing) | 2-week invoicing cycle cut to 1 day |
+| [HR Automation Suite](https://www.varunthallapelly.com/projects/hr-suite) | Training, leave, appraisals and recruitment automated end to end |
+| [Motor Insurance Pricing Analytics](https://www.varunthallapelly.com/projects/insurance-analytics) | +27% pricing accuracy, −15% cost of risk (MSc project) |
+| [Local LoRA Training on Intel Arc](https://www.varunthallapelly.com/work/intel-arc-lora) | Personal image model trained on a laptop GPU in ~25 minutes |
+
+More on the [live site](https://www.varunthallapelly.com/#projects).
+
+**Hiring?** Click **"Hiring?"** on the site for a 30-second summary and CV preview, or [download my CV](https://www.varunthallapelly.com/varun-thallapelly-cv.pdf).
+
+---
+
+## What's on the site
+
+- **Interactive hero:** rotating headline, a portrait that tilts with the cursor, draggable stickers and count-up stats
+- **Impact section:** before/after comparison of the process times I've cut
+- **Experience timeline** with headline metrics for each role
+- **Filterable projects** with a case-study page for each
+- **Skill explorer:** click a skill to see which projects use it
+- **Command palette:** press `Ctrl K` / `⌘ K` to jump anywhere
+- **Recruiter panel:** quick summary with an inline CV preview
+- **Live AI voice demo** of the agent I built (via VAPI)
+- Light theme by default, with a dark mode toggle
+- Works on phones, respects reduced-motion settings, and ships social preview images, structured data and a sitemap
+
+## Tech stack
+
+- [Next.js 16](https://nextjs.org) (App Router) + React 19 + TypeScript
+- Tailwind CSS v4
+- Framer Motion for animation, Lucide for icons
+- Resend for the contact form, VAPI for the voice demo
+- Hosted on Vercel; each push to `main` deploys automatically
+
+## Project structure
+
+```
+app/
+  page.tsx                 Home page (sections in order)
+  projects/[slug]/         Case-study pages (statically generated)
+  work/intel-arc-lora/     LoRA build-log page
+  api/contact/route.ts     Contact form → email (Resend)
+  opengraph-image.tsx      Social share image
+  sitemap.ts, robots.ts    SEO
+components/                One file per section + shared UI (ui.tsx)
+lib/data.ts                All content: profile, jobs, projects, skills
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To update content, edit **`lib/data.ts`**. The home page, case studies and search all read from it.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Running locally
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+Then open [http://localhost:3000](http://localhost:3000).
 
-To learn more about Next.js, take a look at the following resources:
+The contact form needs a `RESEND_API_KEY` environment variable. Put it in `.env.local` locally (git ignores it) and in the Vercel project settings for production. Never commit it.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contact
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Email: [thallapellyvarun@gmail.com](mailto:thallapellyvarun@gmail.com)
+- LinkedIn: [varun-gopi-thallapelly](https://www.linkedin.com/in/varun-gopi-thallapelly/)
+- GitHub: [@varungopithallapelly](https://github.com/varungopithallapelly)
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# portfolio
-My personal portfolio website
-(www.varunthallapelly.com)
+© Varun Thallapelly. The code is shared for reference. Please don't reuse the personal content or images.
